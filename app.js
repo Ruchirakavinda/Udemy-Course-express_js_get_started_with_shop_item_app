@@ -1,16 +1,17 @@
 const express = require("express");
 
 const app = express();
+app.set("view engine","ejs");
 app.listen(3000);
 
 app.get('/',(req,res)=>{
-    res.sendFile("./views/index.html",{root:__dirname})
+    res.render("index")
 });
 
-app.get('/second',(req,res)=>{
-    res.sendFile("./views/second.html",{root:__dirname})
+app.get('/add_item',(req,res)=>{
+    res.render("add_item")
 })
 
 app.use((req,res)=>{
-    res.sendFile("./views/404.html",{root:__dirname})
+    res.render("404")
 })
