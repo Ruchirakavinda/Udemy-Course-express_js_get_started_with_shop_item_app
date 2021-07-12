@@ -1,6 +1,7 @@
 const express = require("express");
 
 const app = express();
+const mongodb ='mongodb+srv://ItemShop:item1234@cluster0.zuicn.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
 app.set("view engine", "ejs");
 app.listen(3000);
 
