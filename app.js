@@ -1,10 +1,18 @@
 const express = require("express");
+const mongoose = require("mongoose");
 
 const app = express();
-const mongodb ='mongodb+srv://ItemShop:item1234@cluster0.zuicn.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
-app.set("view engine", "ejs");
-app.listen(3000);
+const mongodb ='mongodb+srv://ItemShop:item1234@cluster0.zuicn.mongodb.net/Item_data?retryWrites=true&w=majority';
+mongoose.connect(mongodb,{ useNewUrlParser: true,useUnifiedTopology: true }).then(()=>
+{
+    console.log("MongoDB Connected")
+    
+    app.listen(3000);
 
+}).catch(err => console.log(err))
+
+
+app.set("view engine", "ejs");
 app.get('/',(req,res)=>{
 
     const items = [
