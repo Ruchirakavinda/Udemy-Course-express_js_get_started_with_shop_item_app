@@ -13,7 +13,7 @@ app.get('/',(req,res)=>{
         {name:"Study Table",price:"50.0"}
     ]
     
-    res.render("index",{ items})
+    res.render("index",{ items })
 });
 
 app.get('/add_item',(req,res)=>{
