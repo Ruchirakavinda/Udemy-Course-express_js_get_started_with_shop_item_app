@@ -81,6 +81,16 @@ app.post('/input_items',(req,res)=>{
 
 })
 
+
+app.get('/details/:id',(req,res)=>{
+    
+    const id = req.params.id;
+    Item.findById(id).then(result =>{
+        console.log('result',result);
+        res.render('itemDetails',{item : result})
+    })
+})
+
 app.use((req,res)=>{
     res.render("404")
 })
