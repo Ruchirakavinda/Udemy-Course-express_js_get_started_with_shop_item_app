@@ -3,6 +3,8 @@ const mongoose = require("mongoose");
 const Item = require('./models/item');
 
 const app = express();
+
+app.use(express.urlencoded({ extended:true}));
 const mongodb ='mongodb+srv://ItemShop:item1234@cluster0.zuicn.mongodb.net/Item_data?retryWrites=true&w=majority';
 mongoose.connect(mongodb,{ useNewUrlParser: true,useUnifiedTopology: true }).then(()=>
 {
@@ -19,7 +21,7 @@ app.set("view engine", "ejs");
 // app.get('/create_item',(req,res)=>{
 //     const item = new Item(
 //         {
-//             name : "Keybord",
+//             name : "Mouse",
 //             price : 45.0,
 //         }
 //     );
@@ -46,23 +48,37 @@ app.set("view engine", "ejs");
 
 app.get('/',(req,res)=>{
 
-    res.redirect('/get_item');
-});
-
-
-app.get('/get_item',(req,res)=>{
-    
     Item.find().then(result => {
         
         res.render("index",{ items : result })
-
+        
     }).catch(err => console.log(err))
-
 });
+
+
+// app.get('/get_item',(req,res)=>{
+    
+//     Item.find().then(result => {
+        
+//         res.render("index",{ items : result })
+        
+//     }).catch(err => console.log(err))
+
+// });
 
 
 app.get('/add_item',(req,res)=>{
     res.render("add_item")
+});
+
+app.post('/input_items',(req,res)=>{
+    console.log(req.body);
+    const item = Item(req.body);
+    item.save().then(()=>{
+        res.redirect('/');
+    }).catch(err => console.log(err));
+
+
 })
 
 app.use((req,res)=>{
