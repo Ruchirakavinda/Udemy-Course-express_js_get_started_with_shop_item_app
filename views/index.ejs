@@ -5,11 +5,11 @@
   <%- include('./partials/nav.ejs') %> 
       <div class="container">
         <ul class="collection with-header">
-          <li class="collection-header"><h4>Your Items</h4></li>
+          <li class="collection-header"><h5>Your Items</h5></li>
 
             <%if(items.length>0){%>
               <% items.forEach(item => {%>
-              <li class="collection-item"><div><%= item.name %> : $<%= item.price %> <a href="#!" class="secondary-content"><i class="material-icons">delete</i></a>
+              <li class="collection-item"><div><a href="/details/<%= item._id %>"><%= item.name %> : $<%= item.price %></a> <a href="#!" class="secondary-content"><i class="material-icons">delete</i></a>
                 <a href="#!" class="secondary-content"><i class="material-icons">edit</i></a></div></li>
            <% });%>
 
