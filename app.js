@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const Item = require('./models/item');
 
 const app = express();
 const mongodb ='mongodb+srv://ItemShop:item1234@cluster0.zuicn.mongodb.net/Item_data?retryWrites=true&w=majority';
@@ -13,6 +14,36 @@ mongoose.connect(mongodb,{ useNewUrlParser: true,useUnifiedTopology: true }).the
 
 
 app.set("view engine", "ejs");
+
+//example saving data
+app.get('/create_item',(req,res)=>{
+    const item = new Item(
+        {
+            name : "Keybord",
+            price : 45.0,
+        }
+    );
+    item.save().then(result => res.send(result).catch(err => console.log(err)))
+
+});
+
+//example getting data
+app.get('/getting_item',(req,res)=>{
+    
+    Item.find().then(result => res.send(result).catch(err => console.log(err)))
+
+});
+
+//example getting data by ID
+app.get('/getting_item_by_id',(req,res)=>{
+    
+    Item.findById('60ed2eb3ce9bdb3b1843421b').then(result => res.send(result).catch(err => console.log(err)))
+
+});
+
+
+
+
 app.get('/',(req,res)=>{
 
     const items = [
@@ -32,3 +63,7 @@ app.get('/add_item',(req,res)=>{
 app.use((req,res)=>{
     res.render("404")
 })
+
+
+
+
