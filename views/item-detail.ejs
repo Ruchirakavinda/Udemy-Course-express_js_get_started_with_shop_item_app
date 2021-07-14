@@ -20,7 +20,7 @@
     // const id = e.target.getAttribute('data-id');
     const id = deletebtn.dataset.id;
     console.log(id)
-    const endpoint = "/items/"+id+"";
+    const endpoint = `/items/${id}`;
 
     fetch(endpoint,{
       method:'DELETE'
