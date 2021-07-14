@@ -1,21 +1,17 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const Item = require('./models/item');
-
+const express = require('express');
+const mongoose = require('mongoose');
+const Item = require('./models/items');
 const app = express();
 
-app.use(express.urlencoded({ extended:true}));
-const mongodb ='mongodb+srv://ItemShop:item1234@cluster0.zuicn.mongodb.net/Item_data?retryWrites=true&w=majority';
-mongoose.connect(mongodb,{ useNewUrlParser: true,useUnifiedTopology: true }).then(()=>
-{
-    console.log("MongoDB Connected")
-    
+app.use(express.urlencoded({ extended: true }));
+const mongodb = 'mongodb+srv://ItemShop:item1234@cluster0.zuicn.mongodb.net/Item_data?retryWrites=true&w=majority';
+mongoose.connect(mongodb, { useNewUrlParser: true, useUnifiedTopology: true }).then(() => {
+    console.log('connected')
     app.listen(3000);
 
 }).catch(err => console.log(err))
 
-
-app.set("view engine", "ejs");
+app.set('view engine', 'ejs');
 
 // //example saving data
 // app.get('/create_item',(req,res)=>{
@@ -44,8 +40,6 @@ app.set("view engine", "ejs");
 // });
 
 
-
-
 app.get('/',(req,res)=>{
 
     Item.find().then(result => {
@@ -54,7 +48,6 @@ app.get('/',(req,res)=>{
         
     }).catch(err => console.log(err))
 });
-
 
 // app.get('/get_item',(req,res)=>{
     
@@ -66,35 +59,28 @@ app.get('/',(req,res)=>{
 
 // });
 
-
-app.get('/add_item',(req,res)=>{
-    res.render("add_item")
-});
-
-app.post('/input_items',(req,res)=>{
-    console.log(req.body);
-    const item = Item(req.body);
-    item.save().then(()=>{
-        res.redirect('/');
-    }).catch(err => console.log(err));
-
-
+app.get('/add-item', (req, res) => {
+    res.render('add-item');
 })
 
+app.post('/input_items', (req, res) => {
+    console.log(req.body)
+    const item = Item(req.body);
+    item.save().then(() => {
+        res.redirect('/')
+    }).catch(err => console.log(err))
 
-app.get('/details/:id',(req,res)=>{
-    
+})
+app.get('/items/:id', (req, res) => {
     const id = req.params.id;
-    Item.findById(id).then(result =>{
-        console.log('result',result);
-        res.render('itemDetails',{item : result})
+    Item.findById(id).then(result => {
+        console.log('result', result);
+        res.render('item-detail', { item: result })
     })
 })
 
-app.use((req,res)=>{
-    res.render("404")
+app.use((req, res) => {
+    res.render('error');
 })
-
-
 
 

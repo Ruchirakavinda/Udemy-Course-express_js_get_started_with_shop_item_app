@@ -9,7 +9,7 @@
 
             <%if(items.length>0){%>
               <% items.forEach(item => {%>
-              <li class="collection-item"><div><a href="/details/<%= item._id %>"><%= item.name %> : $<%= item.price %></a> <a href="#!" class="secondary-content"><i class="material-icons">delete</i></a>
+              <li class="collection-item"><div><a href="/items/<%= item._id %>"><%= item.name %> : $<%= item.price %></a> <a href="#!" class="secondary-content"><i class="material-icons">delete</i></a>
                 <a href="#!" class="secondary-content"><i class="material-icons">edit</i></a></div></li>
            <% });%>
 
