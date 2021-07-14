@@ -2,11 +2,11 @@ const express = require('express');
 const mongoose = require('mongoose');
 const Item = require('./models/items');
 const app = express();
-
+mongoose.set('useFindAndModify', false);
 app.use(express.urlencoded({ extended: true }));
 const mongodb = 'mongodb+srv://ItemShop:item1234@cluster0.zuicn.mongodb.net/Item_data?retryWrites=true&w=majority';
 mongoose.connect(mongodb, { useNewUrlParser: true, useUnifiedTopology: true }).then(() => {
-    console.log('connected')
+    console.log('MongoDB Connected')
     app.listen(3000);
 
 }).catch(err => console.log(err))

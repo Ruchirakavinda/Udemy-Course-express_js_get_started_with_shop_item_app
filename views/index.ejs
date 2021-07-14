@@ -3,7 +3,7 @@
   <%- include('./partials/head.ejs') %> 
 <body>
   <%- include('./partials/nav.ejs') %> 
-      <div class="container">
+      <div class="container" id="itemContainer">
         <ul class="collection with-header">
           <li class="collection-header"><h5>Your Items</h5></li>
 
@@ -44,65 +44,52 @@
       </div>
 
  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-    var elems = document.querySelectorAll('.modal');
-    var instances = M.Modal.init(elems);
-  });
+   var updateId;
+    document.addEventListener('DOMContentLoaded', function () {
+        var elems = document.querySelectorAll('.modal');
+        var instances = M.Modal.init(elems);
+    });
+    editform.onsubmit = async function (e) {
+        e.preventDefault();
+        let data = new FormData(editform);
+        // for (var pair of data.entries()) {
+        //     console.log(pair[0] + ', ' + pair[1]);
+        // }
+        let resp = await fetch(`/items/${updateId}`, {
+            method: 'PUT',
+            body: new URLSearchParams(data),
+            headers: new Headers({
+                'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8'
+            })
+        })
+        let result = await resp.json()
+        editform.reset();
+        window.location.reload();
+        alert(result.msg);
+    }
 
+    itemContainer.onclick = function (e) {
+        // console.log('e.target.textContent', e.target.textContent)
+        if (e.target.textContent === 'edit') {
+            updateId = e.target.getAttribute('data-id');
+            console.log(updateId)
 
-
-  var upid;
-
-  editform.onsubmit = async function(s){
-    s.preventDefault();
-    let data = new FormData(editform);
-    // for( var i of data.entries()){
-    //   console.log(i[0] + ',' + i[1]);
-    // }
-    let id = deletebtn.dataset.id;
-    console.log(id)
-    let endpoint = "/items/"+id+""; 
-    let resp = await fetch(endpoint,{
-      method:'PUT',
-      body: new URLSearchParams(data),
-      headers: new Headers({
-        'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8'
-      })
-
-    })
-
-    let result = await resp.json()
-    editform.reset();
-    window.location.reload();
-    
-     
-  }
-
-  editbtn.onclick = function(e){
-    e.preventDefault();
-    upid = editbtn.dataset.id;
-    console.log(upid)
-
-  }
-
-  
-
-
-  deletebtn.onclick = function(d){
-    d.preventDefault();
-    // const id = e.target.getAttribute('data-id');
-    const id = deletebtn.dataset.id;
-    console.log(id)
-    const endpoint = "/items/"+id+"";
-
-    fetch(endpoint,{
-      method:'DELETE'
-    }).then(res => res.json()).then(data =>{
-      console.log('data'.data)
-      window.location.href = data.redirect
-    }).catch(err => console.log(err))
-  }
-
+        }
+        if (e.target.textContent === 'delete') {
+            // const id = deleteBtn.dataset.id
+            const id = e.target.getAttribute('data-id');
+            console.log(id)
+            const endpoint = `/items/${id}`;
+            fetch(endpoint, {
+                method: 'DELETE'
+            }).then(res => res.json()).
+                then(data => {
+                    console.log('data', data)
+                    window.location.href = data.redirect
+                }).
+                catch(err => console.log(err))
+        }
+    }
 
  </script>     
 </body>
