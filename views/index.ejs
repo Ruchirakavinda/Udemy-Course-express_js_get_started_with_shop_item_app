@@ -9,8 +9,8 @@
 
             <%if(items.length>0){%>
               <% items.forEach(item => {%>
-              <li class="collection-item"><div><a href="/items/<%= item._id %>" style="text-decoration: none;color: black;"><%= item.name %> : $<%= item.price %></a> <a href="#!" class="secondary-content"><i class="material-icons">delete</i></a>
-                <a href="#!"  class="secondary-content"><i class="material-icons modal-trigger" href="#editform_model">edit</i></a></div></li>
+              <li class="collection-item"><div><a href="/items/<%= item._id %>" style="text-decoration: none;color: black;"><%= item.name %> : $<%= item.price %></a> <a href="#!" class="secondary-content"><i class="material-icons" id="deletebtn" data-id="<%= item._id %>">delete</i></a>
+                <a href="#!"  class="secondary-content"><i class="material-icons modal-trigger" href="#editform_model" id="editbtn" data-id="<%= item._id %>">edit</i></a></div></li>
            <% });%>
 
            <% }else{%>
@@ -23,7 +23,7 @@
       <div id="editform_model" class="modal center-align">
         <div class="modal-content">
           <h4>Edit Item Details</h4>
-          <form class="col s12" action="" method="POST">
+          <form class="col s12" action="" method="POST" id="editform">
               <div class="input-field col s6">
                 <i class="material-icons prefix">shopping_cart</i>
                 <input id="icon_prefix" type="text" class="validate" name="name" >
@@ -35,7 +35,7 @@
                 <label for="icon_telephone">Item Price</label>
             </div>
 
-            <button class="btn">Update</button>
+            <button class="btn modal-close">Update</button>
           </form>
         </div>
         <div class="modal-footer">
@@ -48,6 +48,62 @@
     var elems = document.querySelectorAll('.modal');
     var instances = M.Modal.init(elems);
   });
+
+
+
+  var upid;
+
+  editform.onsubmit = async function(s){
+    s.preventDefault();
+    let data = new FormData(editform);
+    // for( var i of data.entries()){
+    //   console.log(i[0] + ',' + i[1]);
+    // }
+    let id = deletebtn.dataset.id;
+    console.log(id)
+    let endpoint = "/items/"+id+""; 
+    let resp = await fetch(endpoint,{
+      method:'PUT',
+      body: new URLSearchParams(data),
+      headers: new Headers({
+        'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8'
+      })
+
+    })
+
+    let result = await resp.json()
+    editform.reset();
+    window.location.reload();
+    
+     
+  }
+
+  editbtn.onclick = function(e){
+    e.preventDefault();
+    upid = editbtn.dataset.id;
+    console.log(upid)
+
+  }
+
+  
+
+
+  deletebtn.onclick = function(d){
+    d.preventDefault();
+    // const id = e.target.getAttribute('data-id');
+    const id = deletebtn.dataset.id;
+    console.log(id)
+    const endpoint = "/items/"+id+"";
+
+    fetch(endpoint,{
+      method:'DELETE'
+    }).then(res => res.json()).then(data =>{
+      console.log('data'.data)
+      window.location.href = data.redirect
+    }).catch(err => console.log(err))
+  }
+
+
  </script>     
 </body>
 </html>
