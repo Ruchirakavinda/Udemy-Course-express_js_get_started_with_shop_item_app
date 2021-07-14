@@ -10,11 +10,27 @@
         <h6>Created Date &nbsp;  &nbsp;  : &nbsp;  &nbsp;  $<%= item.createdAt%></h6>
         <h6>Last Modified &nbsp;  &nbsp;  : &nbsp;  &nbsp;  $<%= item.updatedAt%></h6>
         <br>
-        <a class="delete btn" href="" >Delete Item</a>
+        <a class="delete btn" href="" id="deletebtn" data-id="<%= item._id %>" >Delete Item</a>
 
       </div>
 
+<script>
+  deletebtn.onclick = function(e){
+    e.preventDefault();
+    // const id = e.target.getAttribute('data-id');
+    const id = deletebtn.dataset.id;
+    console.log(id)
+    const endpoint = "/items/"+id+"";
 
+    fetch(endpoint,{
+      method:'DELETE'
+    }).then(res => res.json()).then(data =>{
+      console.log('data'.data)
+      window.location.href = data.redirect
+    }).catch(err => console.log(err))
+  }
+
+</script>
       
 </body>
 </html>

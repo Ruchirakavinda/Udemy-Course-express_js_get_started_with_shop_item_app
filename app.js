@@ -79,6 +79,17 @@ app.get('/items/:id', (req, res) => {
     })
 })
 
+
+app.delete('/items/:id', (req, res) => {
+    const id = req.params.id;
+    Item.findByIdAndDelete(id).then(result => {
+        res.json({
+            redirect:'/'
+        })
+        
+    })
+})
+
 app.use((req, res) => {
     res.render('error');
 })
